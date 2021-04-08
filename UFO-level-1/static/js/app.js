@@ -4,7 +4,7 @@ var tableData = data;
 // YOUR CODE HERE!
 var tbody = d3.select("tbody");
 
-
+// Using javascript to populate the table in the html with elements from our objects in tableData
 data.forEach(function(ufoData) {
     console.log(ufoData);
     var row = tbody.append("tr");
@@ -18,13 +18,13 @@ data.forEach(function(ufoData) {
   });
 
 
-  // Select the button
+// Selecting the filter button
 var button = d3.select("#filter-btn");
 
-// Select the form
-var form = d3.select("#form");
+// Selecting all forms, because there is only one
+var form = d3.selectAll("form");
 
-// Create event handlers for clicking the button or pressing the enter key
+// event handlers for clicking the button and pressing the enter key
 button.on("click", runEnter);
 form.on("submit", runEnter);
 
@@ -34,16 +34,25 @@ function runEnter() {
   // Prevent the page from refreshing
   d3.event.preventDefault();
 
-  // Select the input element and get the raw HTML node
   var inputElement = d3.select("#datetime");
 
   // Get the value property of the input element
   var inputValue = inputElement.property("value");
 
-  // Print the value to the console
-  console.log(inputValue);
+  // storing the table data in 'filtered' after it is filtered by a date that equals the user input
+  var filtered = tableData.filter(filterDate => filterDate.datetime === inputValue)
 
-  // Set the span tag in the h1 element to the text
-  // that was entered in the form
-//   d3.select("h1>span").text(inputValue);
+  
+  console.log(filtered);
+
+  tbody.html("");
+
+  // Using javascript to populate the table in the html with elements from our objects in filtered, thus only filtered data
+  filtered.forEach((sighting) => {
+      var row = tbody.append("tr");
+      Object.entries(sighting).forEach(([key, value]) => {
+          var data = row.append("td");
+          data.text(value);
+      });
+  });
 };
